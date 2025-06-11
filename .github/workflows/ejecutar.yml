@@ -1,0 +1,32 @@
+name: Ejecutar script cada X horas
+
+on:
+  schedule:
+    - cron: '50 14 * * *'  # 9:50 am Colombia (14:50 UTC)
+    - cron: '50 16 * * *'  # 11:50 am Colombia (16:50 UTC)
+    - cron: '50 18 * * *'  # 1:50 pm Colombia (18:50 UTC)
+    - cron: '50 20 * * *'  # 3:50 pm Colombia (20:50 UTC)
+    - cron: '50 22 * * *'  # 5:50 pm Colombia (22:50 UTC)
+    - cron: '50 0  * * *'  # 7:50 pm Colombia (00:50 UTC siguiente día)
+    - cron: '50 2  * * *'  # 9:50 pm Colombia (02:50 UTC siguiente día)
+  workflow_dispatch:  # Permite ejecutarlo manualmente también
+
+jobs:
+  ejecutar-python:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar el repositorio
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias (si hay requirements.txt)
+        run: |
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      - name: Ejecutar el script
+        run: python facturas.py
