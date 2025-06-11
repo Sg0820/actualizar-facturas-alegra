@@ -1,22 +1,16 @@
-name: Ejecutar script cada X horas
+name: Ejecutar script y subir Excel
 
 on:
   schedule:
-    - cron: '50 14 * * *'  # 9:50 am Colombia (14:50 UTC)
-    - cron: '50 16 * * *'  # 11:50 am Colombia (16:50 UTC)
-    - cron: '50 18 * * *'  # 1:50 pm Colombia (18:50 UTC)
-    - cron: '50 20 * * *'  # 3:50 pm Colombia (20:50 UTC)
-    - cron: '50 22 * * *'  # 5:50 pm Colombia (22:50 UTC)
-    - cron: '50 0  * * *'  # 7:50 pm Colombia (00:50 UTC siguiente día)
-    - cron: '50 2  * * *'  # 9:50 pm Colombia (02:50 UTC siguiente día)
-  workflow_dispatch:  # Permite ejecutarlo manualmente también
+    - cron: '50 16 * * *'  # Se ejecuta automáticamente a las 16:50 UTC
+  workflow_dispatch:       # Permite ejecución manual desde GitHub
 
 jobs:
-  ejecutar-python:
+  run-script:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clonar el repositorio
+      - name: Checkout del repositorio
         uses: actions/checkout@v3
 
       - name: Configurar Python
@@ -24,9 +18,20 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Instalar dependencias (si hay requirements.txt)
+      - name: Instalar dependencias
         run: |
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Ejecutar el script
+      - name: Ejecutar script de facturas
         run: python facturas.py
+
+      - name: Subir Excel generado al repositorio
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}
+          git pull origin main
+          git add facturas_alegra.xlsx
+          git commit -m "Actualización automática del Excel" || echo "Sin cambios"
+          git push origin main
