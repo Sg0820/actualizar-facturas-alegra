@@ -30,8 +30,10 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/${{ github.repository }}
           git pull origin main
           git add facturas_alegra.xlsx
-          git commit -m "Actualización automática del Excel" || echo "Sin cambios"
-          git push origin main
+          git diff --cached --quiet || git commit -m "Actualización automática del Excel"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git push origin HEAD:main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
