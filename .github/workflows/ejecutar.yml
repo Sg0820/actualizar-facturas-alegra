@@ -1,8 +1,8 @@
 name: Ejecutar script y subir Excel
 
-on:
+# ✅ FORMATO CORRECTO PARA EL TRIGGER (asegúrate de la indentación)
+'on':
   schedule:
-    # Horarios Colombia (UTC-5)
     - cron: '50 14 * * *'  # 09:50 COT (UTC-5)
     - cron: '50 16 * * *'  # 11:50 COT
     - cron: '50 18 * * *'  # 13:50 COT
@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout del repositorio
-        uses: actions/checkout@v4  # Actualizado a v4
+        uses: actions/checkout@v4
 
       - name: Configurar Python
         uses: actions/setup-python@v4
@@ -30,17 +30,14 @@ jobs:
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-      - name: Ejecutar script de facturas
+      - name: Ejecutar script
         run: python facturas.py
 
-      - name: Subir Excel generado
+      - name: Subir cambios
         run: |
-          # Configuración básica de Git
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Solo hace commit si el archivo cambió
           git add facturas_alegra.xlsx
-          git diff --cached --quiet || (git commit -m "Actualización automática del Excel [skip ci]" && git push origin HEAD:main)
+          git diff --cached --quiet || (git commit -m "Actualización automática [skip ci]" && git push origin HEAD:main)
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
