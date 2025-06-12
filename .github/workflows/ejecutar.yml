@@ -1,16 +1,11 @@
 name: Ejecutar script y subir Excel
 
-# ✅ FORMATO CORRECTO PARA EL TRIGGER (asegúrate de la indentación)
-'on':
+on:
   schedule:
-    - cron: '50 14 * * *'  # 09:50 COT (UTC-5)
-    - cron: '50 16 * * *'  # 11:50 COT
-    - cron: '50 18 * * *'  # 13:50 COT
-    - cron: '50 20 * * *'  # 15:50 COT
-    - cron: '50 22 * * *'  # 17:50 COT
-    - cron: '50 0 * * *'   # 19:50 COT (día siguiente UTC)
-    - cron: '50 2 * * *'   # 21:50 COT (día siguiente UTC)
-  workflow_dispatch:       # Permite ejecución manual
+    # Horarios Colombia (UTC-5) - Formato simplificado que funciona
+    - cron: '50 14,16,18,20,22 * * *'  # 9:50, 11:50, 13:50, 15:50, 17:50 COT
+    - cron: '50 0,2 * * *'             # 19:50, 21:50 COT (día siguiente UTC)
+  workflow_dispatch:
 
 jobs:
   run-script:
@@ -19,7 +14,7 @@ jobs:
     steps:
       - name: Checkout del repositorio
         uses: actions/checkout@v4
-
+        
       - name: Configurar Python
         uses: actions/setup-python@v4
         with:
