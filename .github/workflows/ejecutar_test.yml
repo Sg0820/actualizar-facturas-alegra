@@ -1,16 +1,1 @@
-name: Ejecutar script y subir Excel
 
-on:
-  schedule:
-    - cron: '*/5 * * * *'
-  workflow_dispatch:
-
-jobs:
-  test-job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        
-      - name: Run test
-        run: echo "✅ Funciona correctamente"
