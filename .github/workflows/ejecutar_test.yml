@@ -3,7 +3,7 @@ name: Ejecutar script y subir Excel (TEST cada 5 min)
 on:
   schedule:
     - cron: '*/5 * * * *'  # Ejecutar cada 5 minutos (UTC)
-  workflow_dispatch:        # Permite ejecución manual
+  workflow_dispatch:       # Permite ejecución manual desde la interfaz
 
 jobs:
   run-script:
