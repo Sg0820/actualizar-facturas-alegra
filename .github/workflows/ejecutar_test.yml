@@ -9,8 +9,8 @@ jobs:
   test-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
         
-      - name: Test run
+      - name: Run test
         run: echo "✅ Funciona correctamente"
