@@ -1,6 +1,5 @@
 name: Ejecutar script y subir Excel
 
-# 🔥 SOLUCIÓN DEFINITIVA - Versión comprobada
 on: 
   schedule:
     - cron: '50 14 * * *'  # 09:50 COT
@@ -15,27 +14,30 @@ on:
 jobs:
   run-script:
     runs-on: ubuntu-latest
-    
+
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-          
+
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          
-      - name: Run script
+
+      - name: Run facturas.py
         run: python facturas.py
-        
+
+      - name: Run inventario.py
+        run: python inventario.py
+
       - name: Commit and push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add facturas_alegra.xlsx
+          git add facturas_alegra.xlsx inventario_alegra.xlsx
           git commit -m "Update Excel [skip ci]" || echo "No changes to commit"
           git push
         env:
