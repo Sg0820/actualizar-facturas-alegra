@@ -33,12 +33,15 @@ jobs:
 
       - name: Run Inventario.py
         run: python Inventario.py
+
+      - name: Run Compras.py
+        run: python Compras.py
         
       - name: Commit and push
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add facturas_alegra.xlsx inventario_alegra.xlsx
+          git add facturas_alegra.xlsx inventario_alegra.xlsx compras_drogueria.xlsx
           git commit -m "Update Excel [skip ci]" || echo "No changes to commit"
           git push
         env:
